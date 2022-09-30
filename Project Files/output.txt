@@ -1,0 +1,5 @@
+DGAA from ACC to LHR 0 stops
+EGLL from LHR to DEN 0 stops
+KDEN from DEN to YWG 0 stops
+Total flights: 3
+Total additional stops: 0
