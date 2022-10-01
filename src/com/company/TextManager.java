@@ -67,22 +67,46 @@ public class TextManager {
         ArrayList<Airport> visitedAiports = FindRoute.breadthFirstSearch();
         try {
             BufferedWriter myWriter = new BufferedWriter(new FileWriter(filepath));
-            ArrayList<Airport> revArrayList = new ArrayList<>();
-            for (int i = visitedAiports.size() - 1; i >= 0; i--) {
-                revArrayList.add(visitedAiports.get(i));
+            // ArrayList<Airport> revArrayList = new ArrayList<>();
+            // for (int i = visitedAiports.size() - 1; i >= 0; i--) {
+            //     revArrayList.add(visitedAiports.get(i));
+            // }
+
+            // int i = 0;
+            // int stops = 0;
+            // while (i < revArrayList.size() - 1) {
+            //     myWriter.write(revArrayList.get(i).getAirportICAO()
+            //             + " from " + revArrayList.get(i).getAirportIATA() + " to "
+            //             + revArrayList.get(i + 1).getAirportIATA()
+            //             + " 0 stops\n");
+            //     i++;
+            // }
+            ArrayList<Route> visitedRoutes = FindRoute.getSuccessRoutes();
+            ArrayList<Route> revArrayList = new ArrayList<>();
+            for (int i = visitedRoutes.size() - 1; i >= 0; i--) {
+                revArrayList.add(visitedRoutes.get(i));
             }
-            revArrayList.add(FindRoute.destinationAirport(FindRoute.dCity(), FindRoute.dCountry()));
 
             int i = 0;
-            while (i < revArrayList.size() - 1) {
-                myWriter.write(revArrayList.get(i).getAirportICAO()
-                        + " from " + revArrayList.get(i).getAirportIATA() + " to "
-                        + revArrayList.get(i + 1).getAirportIATA()
-                        + " 0 stops\n");
+            int stops = 0;
+            String a = "";
+            
+            while (i < revArrayList.size()-1) {
+                myWriter.write(revArrayList.get(i).getAirlineCode()
+                        + " from " + revArrayList.get(i).getSourceAirport() + " to "
+                        + revArrayList.get(i).getDestinationAirport() + " "
+                        + Integer.toString(revArrayList.get(i).getStops()) +" stops\n");
+                        stops += revArrayList.get(i).getStops();
+                a = revArrayList.get(i).getDestinationAirport();
                 i++;
             }
+            myWriter.write(FindRoute.dRoute().getAirlineCode()
+                        + " from " + a + " to "
+                        + FindRoute.dRoute().getDestinationAirport() + " "
+                        + Integer.toString(FindRoute.dRoute().getStops()) +" stops\n");
+
             myWriter.write("Total flights: " + Integer.toString(visitedAiports.size()) + "\n");
-            myWriter.write("Total additional stops: " + Integer.toString(0));
+            myWriter.write("Total additional stops: " + Integer.toString(FindRoute.dRoute().getStops() + stops));
             myWriter.close();
         } catch (IOException e) {
             System.out.println(e.getStackTrace());

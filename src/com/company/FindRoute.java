@@ -16,7 +16,9 @@ public class FindRoute {
     private static String startCity = start[0];
     private static String startCountry = start[1];
     private static String destinationCity = destination[0];
-    private static String destinationCountry = destination[1];
+    private static ArrayList<Route> succRoutes = new ArrayList<>();
+    // private static String destinationCountry = destination[1];
+    private static Route desRoute;
 
     /**
      * Return the airport object that matches the city and country passed in.
@@ -35,6 +37,17 @@ public class FindRoute {
         return airport;
     }
 
+    public static ArrayList<Route>getSuccessRoutes() {    
+        for (Airport airport : breadthFirstSearch()) {
+            for (Route route : routes) {
+                if ((route.getSourceAirportID() == airport.getAirportID())) {
+                    succRoutes.add(route);
+                    break;
+                }
+            }
+        }
+        return succRoutes;
+    }
     /**
      * This function takes in a city and country and returns the airport object that
      * matches the city
@@ -66,19 +79,15 @@ public class FindRoute {
         for (Route route : routes) {
             if (route.getSourceAirportID() == (airport.getAirportID())) {
                 Airport suc_airport = airports.get(route.getDestinationAirportID());
-                if (suc_airport != null)
+                if (suc_airport != null && route != null)
                     succAirports.add(suc_airport);
             }
         }
         return succAirports;
     }
 
-    public static String dCity() {
-        return destinationCity;
-    }
-
-    public static String dCountry() {
-        return destinationCountry;
+    public static Route dRoute() {
+        return desRoute;
     }
 
     /**
@@ -95,6 +104,7 @@ public class FindRoute {
                 for (Route route : routes) {
                     if ((route.getSourceAirportID() == airport.getAirportID()) &&
                             route.getDestinationAirportID() == airpt.getAirportID()) {
+                                desRoute = route;
                         checker = true;
                     }
                 }
@@ -148,5 +158,5 @@ public class FindRoute {
             }
             return null;
         }
-    }
+    } 
 }
